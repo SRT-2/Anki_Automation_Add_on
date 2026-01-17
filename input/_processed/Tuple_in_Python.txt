@@ -1,0 +1,55 @@
+Deck: Striver's A2Z DSA Sheet::Python Tuple Module
+
+Front: Why are tuples preferred over lists as dictionary keys or set elements?
+Back: Tuples are **immutable and hashable**, guaranteeing stable hash values, whereas lists are mutable and therefore cannot be safely hashed.
+
+Front: How does tuple immutability influence program correctness and debugging?
+Back: Immutability prevents accidental state changes, reducing side effects and making code behavior more predictable and easier to reason about.
+
+Front: When should a tuple be used instead of a custom class or dictionary?
+Back: When data is **fixed-structure, ordered, lightweight**, and behavior-free—e.g., coordinates, database rows, or function returns with known positions.
+
+Front: Why does `(item,)` create a tuple but `(item)` does not?
+Back: Parentheses are not the tuple indicator—the **comma is**. `(item)` is just grouping, while `(item,)` explicitly defines a tuple.
+
+Front: How does tuple packing and unpacking improve function interfaces?
+Back: It allows multiple values to be returned and assigned cleanly, encouraging **functional-style APIs** without auxiliary containers.
+
+Front: What happens internally when you “modify” a tuple?
+Back: You cannot modify it; any apparent modification actually **creates a new tuple**, which has implications for memory and performance.
+
+Front: Why are tuples generally more memory-efficient than lists?
+Back: Tuples have a **fixed size** and simpler internal structure, avoiding the over-allocation strategy used by lists.
+
+Front: How does tuple immutability interact with mutable objects inside a tuple?
+Back: The tuple structure is immutable, but **mutable elements inside it can still change**, which can lead to subtle bugs.
+
+Front: In what scenarios does tuple unpacking fail at runtime?
+Back: When the number of variables does not match the tuple length, raising a `ValueError`, enforcing strict structural expectations.
+
+Front: Why is tuple iteration faster than list iteration in CPython?
+Back: CPython optimizes tuple iteration due to immutability, allowing simpler and faster iteration paths.
+
+Front: How does slicing a tuple differ conceptually from slicing a list?
+Back: Slicing a tuple always returns a **new tuple**, reinforcing immutability, while list slicing creates a new list but allows later mutation.
+
+Front: Why are tuples commonly used to represent database records?
+Back: They model **read-only rows** naturally, preventing accidental updates and reflecting relational immutability semantics.
+
+Front: How does tuple comparison work, and why can it be dangerous?
+Back: Tuples are compared **lexicographically**, element by element, which can cause logical errors if ordering assumptions are incorrect.
+
+Front: When is using a single-element tuple practically important?
+Back: In APIs expecting iterables (e.g., SQL params, function arguments), where `(x,)` ensures correct iterable semantics.
+
+Front: Why is tuple-based multiple assignment considered more than syntactic sugar?
+Back: It enables **atomic reassignment** (e.g., swapping variables) without temporary variables, improving safety and clarity.
+
+Front: What design principle does heavy tuple usage typically indicate?
+Back: A preference for **immutable data flow**, often aligned with functional programming and concurrency-safe designs.
+
+Front: Critical Point: Tuple immutability guarantee
+Back: Immutability applies to the **tuple container**, not recursively to its contents—always audit nested mutable objects.
+
+Front: Critical Point: Tuple vs List decision rule
+Back: Use tuples for **fixed, identity-based data**; lists for **dynamic, stateful collections**.

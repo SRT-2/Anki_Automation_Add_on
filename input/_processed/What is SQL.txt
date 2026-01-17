@@ -1,0 +1,98 @@
+Deck: AI/ML Roadmap::SQL::Core Concepts
+
+Front: **Why is SQL considered a declarative language, and how does this impact query optimization?**
+Back: SQL is declarative because the user specifies *what* data is needed, not *how* to retrieve it. This allows the query optimizer to choose the most efficient execution plan (indexes, join order, access paths) without changing the query logic.
+
+---
+
+Front: **How do PRIMARY KEY and UNIQUE constraints differ internally in terms of indexing and NULL handling?**
+Back: PRIMARY KEY enforces uniqueness + NOT NULL and automatically creates a clustered or unique index. UNIQUE allows NULLs (DB-dependent count) and creates a unique index but does not enforce entity integrity like PRIMARY KEY.
+
+---
+
+Front: **Why are indexes a trade-off between read and write performance?**
+Back: Indexes speed up SELECT queries by reducing scans, but INSERT/UPDATE/DELETE operations become slower because indexes must be updated, increasing I/O and maintenance cost.
+
+---
+
+Front: **When should you prefer a composite index over multiple single-column indexes?**
+Back: Composite indexes are preferred when queries frequently filter or sort on multiple columns together in a specific order; multiple single-column indexes cannot always be combined efficiently.
+
+---
+
+Front: **How does the order of columns in a composite index affect query performance?**
+Back: Indexes follow the leftmost prefix rule—only queries filtering on the leading column(s) benefit. Poor column ordering can make the index unusable for many queries.
+
+---
+
+Front: **Why are INNER JOIN and WHERE filters not always interchangeable in terms of performance?**
+Back: While logically equivalent in many cases, placing conditions in JOIN vs WHERE can affect join order, intermediate result size, and optimizer choices—especially with OUTER JOINs.
+
+---
+
+Front: **What is the difference between WHERE and HAVING, and why does it matter for performance?**
+Back: WHERE filters rows before grouping; HAVING filters after aggregation. Using HAVING unnecessarily causes extra grouping work and degrades performance.
+
+---
+
+Front: **How does normalization improve data integrity but sometimes hurt performance?**
+Back: Normalization reduces redundancy and update anomalies but increases joins. Excessive joins can slow queries, leading to selective denormalization in read-heavy systems.
+
+---
+
+Front: **Why is a FULL TABLE SCAN sometimes faster than using an index?**
+Back: For small tables or queries returning a large percentage of rows, scanning sequentially can be faster than random I/O caused by index lookups.
+
+---
+
+Front: **How do ACID properties relate to transaction safety in SQL databases?**
+Back: ACID ensures Atomicity (all-or-nothing), Consistency (valid state), Isolation (no interference), and Durability (persistence), preventing data corruption in concurrent environments.
+
+---
+
+Front: **What is the practical difference between DELETE, TRUNCATE, and DROP?**
+Back: DELETE is logged and reversible (ROLLBACK), TRUNCATE is minimally logged and faster but irreversible, DROP removes the table structure entirely.
+
+---
+
+Front: **Why can NULL values cause unexpected results in comparisons and aggregates?**
+Back: NULL represents unknown; comparisons with NULL return UNKNOWN, not TRUE/FALSE. Aggregates ignore NULLs except COUNT(*), leading to logical pitfalls.
+
+---
+
+Front: **How do correlated subqueries differ from JOINs in execution cost?**
+Back: Correlated subqueries may execute once per row of the outer query, making them expensive; JOINs are usually optimized into set-based operations.
+
+---
+
+Front: **When is EXISTS preferred over IN in subqueries?**
+Back: EXISTS short-circuits on first match and handles NULLs safely, while IN can behave unexpectedly with NULLs and may require scanning the entire subquery result.
+
+---
+
+Front: **Quiz: Why does COUNT(column) ≠ COUNT(*) in real-world datasets?**
+Back: COUNT(column) ignores NULL values, while COUNT(*) counts all rows regardless of NULLs—critical when measuring data completeness.
+
+---
+
+Front: **Quiz: How can improper indexing worsen query performance instead of improving it?**
+Back: Too many or poorly designed indexes increase optimizer confusion, index maintenance cost, and can lead to suboptimal execution plans.
+
+---
+
+Front: **Critical Point: Why should SELECT * be avoided in production queries?**
+Back: It increases I/O, breaks when schema changes, prevents index-only scans, and tightly couples queries to table structure.
+
+---
+
+Front: **Critical Point: Why is understanding the query execution plan essential for SQL optimization?**
+Back: Execution plans reveal scans, joins, index usage, and cost estimates—without them, performance tuning is guesswork.
+
+---
+
+Front: **Advanced Thinking: When would you intentionally denormalize a database schema?**
+Back: In read-heavy systems (analytics, caching layers) where reduced joins and faster reads outweigh redundancy and update complexity.
+
+---
+
+Cloze: In SQL optimization, the {{c1::query execution plan}} is the primary tool used to analyze performance bottlenecks.

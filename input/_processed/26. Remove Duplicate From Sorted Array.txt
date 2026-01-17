@@ -1,0 +1,166 @@
+Deck: LeetCode::Easy::26. Remove Duplicates from Sorted Array
+
+---
+
+Front: **What core property of the input array makes an O(n), in-place solution possible?**
+Back:
+The array is **sorted in non-decreasing order**, so **all duplicates are adjacent**.
+This allows a **single linear scan** where we only compare the current element with the **last unique element placed**, instead of checking against all previous values.
+
+---
+
+Front: **What is the core intuition behind the two-pointer approach in this problem?**
+Back:
+Maintain:
+
+* One pointer (`write` / `k`) for the position of the **last unique element**
+* One pointer (`read`) to scan the array
+  When `nums[read] != nums[write]`, we’ve found a new unique value → move `write` forward and overwrite `nums[write]`.
+
+---
+
+Front: **Step-by-step algorithm (logic, not code)**
+Back:
+
+1. Initialize `write = 0` (first element is always unique).
+2. Iterate `read` from index `1` to `n-1`.
+3. If `nums[read] != nums[write]`:
+
+   * Increment `write`
+   * Assign `nums[write] = nums[read]`
+4. Return `write + 1` as `k`.
+
+---
+
+Front: **What invariant is maintained throughout the loop? (CRITICAL)**
+Back:
+At any point:
+
+* `nums[0 .. write]` contains **only unique elements**
+* They are in **sorted order**
+* `write + 1` equals the count of unique elements found so far
+  Breaking this invariant leads to incorrect overwrites or skipped values.
+
+---
+
+Front: **Why does converting the array to a `set` fail this problem?**
+Back:
+
+* Violates **in-place modification** requirement
+* Loses **relative order** guarantee
+* Reassigning `nums = list(set(nums))` only changes the local reference, not the caller’s array
+  This directly explains why your earlier `set`-based attempt didn’t work in LeetCode.
+
+---
+
+Front: **Why must the function return `write + 1` instead of `write`?**
+Back:
+`write` is an **index**, not a count.
+Since indices are 0-based:
+
+* Number of unique elements = last index + 1
+  Returning `write` would undercount by 1.
+
+---
+
+Front: **What would break if the array were NOT sorted?**
+Back:
+The adjacency assumption fails.
+Duplicates could appear anywhere, so comparing only with the previous unique element would miss duplicates later → incorrect results.
+A different approach (hashing) would be required, which breaks in-place constraints.
+
+---
+
+Front: **Edge case: array length = 1 — why does the algorithm still work?**
+Back:
+
+* Loop never executes
+* `write` remains `0`
+* Return `1` correctly
+  The invariant holds without special-case handling.
+
+---
+
+Front: **Time complexity — justify it beyond “single loop”**
+Back:
+Each element is:
+
+* Read exactly once
+* Written at most once
+  No nested loops, no backtracking → **O(n)** deterministic linear pass.
+
+---
+
+Front: **Space complexity — why is it truly O(1)?**
+Back:
+Only constant extra variables (`write`, `read`) are used.
+All modifications occur **inside the input array**.
+No auxiliary data structures are allocated.
+
+---
+
+Front: **Minimal code insight: what does this condition guarantee?**
+`if nums[read] != nums[write]:`
+Back:
+It ensures:
+
+* We only overwrite when a **new unique value** is found
+* Prevents duplicate values from being copied forward
+  This single condition enforces correctness of the invariant.
+
+---
+
+Front: **Common bug: starting both pointers at index 0 — why is that wrong?**
+Back:
+Comparing `nums[0]` with itself always fails the uniqueness check.
+You’d either:
+
+* Miss all unique transitions, or
+* Perform unnecessary overwrites
+  Starting `read` at index `1` is essential.
+
+---
+
+Front: **Why is overwriting earlier positions safe in this problem?**
+Back:
+Because the problem explicitly allows ignoring elements **beyond index k−1**.
+We only care about the prefix `[0 … k-1]`, so overwriting does not lose required information.
+
+---
+
+Front: **Quiz: What breaks if we increment `write` before checking equality?**
+Back:
+You’d advance the write position **too early**, causing:
+
+* Duplicate values to be written
+* Skipped comparisons
+  This violates the invariant that `nums[0..write]` contains only unique elements.
+
+---
+
+Front: **How would the solution change if each element were allowed at most twice?**
+Back:
+You’d track **frequency using pointer distance**, not a set.
+Condition becomes something like:
+`if write < 2 or nums[read] != nums[write-2]`
+This problem directly generalizes to LeetCode 80.
+
+---
+
+Front: **High-yield reusable pattern name**
+Back:
+**Two Pointers (Read–Write / Slow–Fast) on Sorted Array**
+Applies to:
+
+* Deduplication
+* Compression
+* In-place filtering
+* Frequency-limited variants
+
+---
+
+If you want, next we can:
+
+* 🔁 Generate **comparison cards** between this and **LeetCode 80**
+* 🧠 Add a **“why my first solution failed”** reflection card explicitly
+* 🚀 Move to your **next solved problem** and keep the same deck structure
